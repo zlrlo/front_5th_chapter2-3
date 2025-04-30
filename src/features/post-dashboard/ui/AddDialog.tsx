@@ -1,11 +1,14 @@
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "@/shared/ui"
 import { useState } from "react"
+import { usePostDashboardStore } from "../model"
 
 type AddDialogProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 export function AddDialog({ open, onOpenChange }: AddDialogProps) {
+  const posts = usePostDashboardStore((state) => state.posts)
+  const setPosts = usePostDashboardStore((state) => state.setPosts)
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
 
   const addPost = async () => {
@@ -16,7 +19,7 @@ export function AddDialog({ open, onOpenChange }: AddDialogProps) {
         body: JSON.stringify(newPost),
       })
       const data = await response.json()
-      // setPosts([data, ...posts])
+      setPosts([data, ...posts])
       onOpenChange(false)
       setNewPost({ title: "", body: "", userId: 1 })
     } catch (error) {
